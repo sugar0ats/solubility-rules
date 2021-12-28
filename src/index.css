@@ -11,3 +11,15 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.insol {
+  color:#FF4F00;
+}
+
+.sol {
+  color: #3BB300;
+}
+
+.not-mol {
+  color: orange;
+}
