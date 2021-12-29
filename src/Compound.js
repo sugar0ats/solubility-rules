@@ -112,6 +112,7 @@ const Compound = () => {
     console.log(FinalTable);
     console.log(sortedPT);
     console.log(findElement('Ag'));
+    console.log("this is from the pc!! hope this actually works!");
 
     const [anion, setAnion] = useState('Cl'); // create state variables for the anion and cation of the compound
     const [cation, setCation] = useState('Ag');
