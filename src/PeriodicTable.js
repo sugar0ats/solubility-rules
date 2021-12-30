@@ -2,7 +2,7 @@ class Ion {
     constructor(name, charge, rule) {
         this.name = name; // a string
         this.charge = charge; // an array of integers, positive or negative
-        this.type = (charge[0] > 0 ? 'cation' : 'anion');
+        this.isCation = (charge[0] > 0 ? true : false);
         this.rule = rule; // an integer, which rule the ion pertains to
     }
 
@@ -14,8 +14,8 @@ class Ion {
         return this.charge;
     }
 
-    getType() {
-        return this.type;
+    getIsCation() {
+        return this.isCation;
     }
 
     getRule() {
@@ -55,6 +55,7 @@ PeriodicTable.map((subArray, index) => {
     
     const newArr = subArray.map((element) => {
         //console.log(new Ion(element, chargeCoefficient * charge, null));
+        charge = (element === 'Ag' ? 1 : charge);
         return new Ion(element, [chargeCoefficient * charge], null)}
     );
     
@@ -66,7 +67,7 @@ FinalTable.push([
     new Ion('CH3COO', [-1], 2),
     new Ion('CrO4', [-2], 5),
     new Ion('NO3', [-1], 2),
-    new Ion('ClO4', [-2], 2), // DOUBLE CHECK THIS
+    new Ion('ClO4', [-1], 2), // DOUBLE CHECK THIS
     new Ion('PO4', [-3], 5),
     new Ion('CO3', [-2], 5),
     new Ion('OH', [-1], 5),
