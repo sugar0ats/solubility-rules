@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/github.io/solubility-rules/static/css/main.b153c8fe.css",
-    "main.js": "/github.io/solubility-rules/static/js/main.01b6f6e3.js",
-    "static/js/787.bbced4d9.chunk.js": "/github.io/solubility-rules/static/js/787.bbced4d9.chunk.js",
-    "static/media/logo.svg": "/github.io/solubility-rules/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
-    "index.html": "/github.io/solubility-rules/index.html",
-    "main.b153c8fe.css.map": "/github.io/solubility-rules/static/css/main.b153c8fe.css.map",
-    "main.01b6f6e3.js.map": "/github.io/solubility-rules/static/js/main.01b6f6e3.js.map",
-    "787.bbced4d9.chunk.js.map": "/github.io/solubility-rules/static/js/787.bbced4d9.chunk.js.map"
+    "main.css": "/solubility-rules/static/css/main.b153c8fe.css",
+    "main.js": "/solubility-rules/static/js/main.88237c8b.js",
+    "static/js/787.bbced4d9.chunk.js": "/solubility-rules/static/js/787.bbced4d9.chunk.js",
+    "static/media/logo.svg": "/solubility-rules/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
+    "index.html": "/solubility-rules/index.html",
+    "main.b153c8fe.css.map": "/solubility-rules/static/css/main.b153c8fe.css.map",
+    "main.88237c8b.js.map": "/solubility-rules/static/js/main.88237c8b.js.map",
+    "787.bbced4d9.chunk.js.map": "/solubility-rules/static/js/787.bbced4d9.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.b153c8fe.css",
-    "static/js/main.01b6f6e3.js"
+    "static/js/main.88237c8b.js"
   ]
 }
