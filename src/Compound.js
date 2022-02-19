@@ -7,17 +7,27 @@
     // incorporate objects and classes for anions and cations, have them have a "charge" property
     // and a "rule" property!
 
-import React , {useState, useEffect} from 'react';
+
+/*
+
+TODO:
+* convert subscripts into actually subscripts for polyatomic ions using sub tag
+* figure out how to resolve the 2/2 subscript issue, where both ions have 2 as the subscript
+* CSS styling
+
+*/ 
+
+import React , {useState, useEffect, useCallback} from 'react';
 import FinalTable from './PeriodicTable';
 
-const periodicTable = [['H', 'Li', 'Na', 'K', 'Rb', 'Cs'], // each array is a column, minus the transition metals
-                       ['Be', 'Mg', 'Ca', 'Sr', 'Ba'], 
-                       ['Sc', 'Ti', 'V', 'Cr', 'Mn', 'Fe', 'Co', 'Ni', 'Cu', 'Zn', 'Ag', 'Cd', 'Pt', 'Au', 'Hg'], 
-                       ['Al'], // transition metals
-                       [], // where C would be
-                       ['N', 'P'],
-                       ['O', 'S'],
-                       ['F', 'Cl', 'Br', 'I']];
+// const periodicTable = [['H', 'Li', 'Na', 'K', 'Rb', 'Cs'], // each array is a column, minus the transition metals
+//                        ['Be', 'Mg', 'Ca', 'Sr', 'Ba'], 
+//                        ['Sc', 'Ti', 'V', 'Cr', 'Mn', 'Fe', 'Co', 'Ni', 'Cu', 'Zn', 'Ag', 'Cd', 'Pt', 'Au', 'Hg'], 
+//                        ['Al'], // transition metals
+//                        [], // where C would be
+//                        ['N', 'P'],
+//                        ['O', 'S'],
+//                        ['F', 'Cl', 'Br', 'I']];
 
 //const allThings = []; // all elements humanly conceivable on the PT, plus all polyatomic ions
 
@@ -57,18 +67,14 @@ const listEquals = (thing, list) => {
 
 const findElement = (name) => { // name would be a string of the element's name
     let copy = [...sortedPT];
-    //console.log(copy);
     let index;
     let low = 0;
     let high = copy.length-1;
     
     while (low <= high) {
         index = Math.floor((low + high) / 2);
-        //console.log("index: " + copy[index].getName());
         if (copy[index].getName().localeCompare(name) > 0) { // name goes before the half
             high = index - 1;
-            //console.log('test');
-            
 
         } else if (copy[index].getName().localeCompare(name) < 0) { // name goes after the half
             low = index + 1;
@@ -76,29 +82,42 @@ const findElement = (name) => { // name would be a string of the element's name
         } else {
             return copy[index];
         }
-        //copy = copy.slice(low, high);
-        //console.log(copy);
-        //console.log(copy.length);
         
     }
     return false;
 
-}
+} // returns an object from the sortedPT that corresponds with the element inputted
 
-const findCharge = (ion) => { // takes a string or false
-    let test = findElement(ion);
+const findCharge = (ion) => { // takes a string
+    const test = findElement(ion); // returns an object or false
     if (!test) {
         return false;
     } else {
-        return test.getCharge();
+        return test.getCharge(); // RETURNS A ONE ELEMENT ARRAY
     }
 
 }
 
+const checkPoly = (string) => {
+    const test = findElement(string);
+    if (!test) {
+        return false;
+    } else {
+        return test.getIsPolyatomic();
+    }
+}
+
 const isValid = (cation, anion) => {
+    // console.log(cation);
+    // console.log(anion);
+    // console.log(findElement(cation));
+    // console.log(findElement(anion));
+    // console.log(findCharge(cation)[0] > 0);
+    // console.log(findCharge(anion)[0] < 0);
+    // console.log((findElement('K') || findElement('Cl')) && findCharge('K')[0] > 0 && findCharge('Cl')[0] < 0);
     //console.log((!findElement(cation) || !findElement(anion)) && findCharge(cation) > 0 && findCharge(anion) < 0);
     //console.log((findElement(cation) || findElement(anion)) && findCharge(cation) > 0 && findCharge(anion) < 0);
-    return (findElement(cation) || findElement(anion)) && findCharge(cation) > 0 && findCharge(anion) < 0;
+    return (findElement(cation) || findElement(anion)) && findCharge(cation)[0] > 0 && findCharge(anion)[0] < 0;
 }
 
 
@@ -109,39 +128,54 @@ const Compound = () => {
     //console.log(findElement('Ag'));
     //console.log("this is from the pc!! hope this actually works!");
 
+    
+
     const [anion, setAnion] = useState('Cl'); // create state variables for the anion and cation of the compound
-    const [cation, setCation] = useState('Ag');
+    const [cation, setCation] = useState('Ba');
     const [posCharge, setPosCharge] = useState(findCharge(cation));
     const [negCharge, setNegCharge] = useState(findCharge(anion));
+    const [posSubscript, setPosSubscript] = useState(null);
+    const [negSubscript, setNegSubscript] = useState(2);
     const [soluble, setSoluble] = useState(false);
     const [notAMol, setNotAMol] = useState(false);
 
-    useEffect(() => {
-        solubleOrNah(cation, anion);
-        //console.log('how often does this happen?');
-    }, [cation, anion])
-
-    const displayedCharge = (ion) => {
-        let object = findElement(ion);
-        if (isValid(cation, anion)) {
-            console.log(object);
-            let type = object.getIsCation();
-            console.log(type);
+    const displayedCharge = useCallback((ion) => { // takes in a string
+        console.log(ion);
+        let object = findElement(ion); // returns object from the sorted table
+        console.log(object);
+        console.log(isValid(cation, anion));
+        if (isValid(cation, anion) && object) { // check if the current anion and cation work to form a coherent ionic compound
+            //console.log(object);
+            let type = object.getIsCation(); // check if the ion is a cation or not
+            //console.log(type);
             let dispCharge;
-            if (type) {
+            if (type) { // if the ion is a cation, its charge must be the anion's charge according to the criss-cross method
                 dispCharge = (negCharge[0] === -1 ? '' : Math.abs(negCharge));
-                console.log(negCharge);
+                console.log(dispCharge);
                 return dispCharge;
             } else {
                 dispCharge = (posCharge[0] === 1 ? '' : Math.abs(posCharge));
+                console.log(dispCharge);
                 return dispCharge;
+                
             }
 
         } else {
-            return '';
+            console.log('test');
+            return false;
         }
         
-    }
+    }, [cation, anion, negCharge, posCharge])
+
+    useEffect(() => {
+        solubleOrNah(cation, anion);
+        setPosSubscript(displayedCharge(cation));
+        setNegSubscript(displayedCharge(anion));
+        //console.log(posSubscript, negSubscript);
+        //console.log('how often does this happen?');
+    }, [cation, anion, posSubscript, negSubscript, displayedCharge])
+
+    
 
     const solubleOrNah = (cation, anion) => {
     // rule 1: ammonium, H, and all group 1 metals are soluble if in cation
@@ -193,27 +227,31 @@ const Compound = () => {
 
     const handleCationChange = (e) => {
         const newCation = e.target.value;
+        console.log(newCation);
         setCation(newCation);
         setPosCharge(findCharge(newCation));
+        // setPosSubscript(displayedCharge(cation));
+        // setNegSubscript(displayedCharge(anion));
+        console.log("pos subscript: " + displayedCharge(newCation));
+        console.log("pos charge: " + findCharge(newCation));
     }
 
     const handleAnionChange = (e) => {
         const newAnion = e.target.value;
         setAnion(newAnion);
         setNegCharge(findCharge(newAnion));
+        // setNegSubscript(displayedCharge(anion));
+        // setPosSubscript(displayedCharge(cation));
+        console.log("neg subscript: " + negSubscript);
+        console.log("neg charge: " + findCharge(newAnion));
     }
 
     return <React.Fragment>
-        <header>
-            <h3 className="sol-title">
-                Ionic Compounds Solubility Rules Checker
-            </h3>
-            <p>input a cation and an anion to see if the resulting ionic compound is soluble!</p>
-        </header>
+        
 
         {/* input a cation and anion here */}
         <div>
-            <label htmlFor="cation">cation:</label>
+            {/* <label htmlFor="cation">cation:</label> */}
             <input
             className=""
             type='text'
@@ -221,9 +259,10 @@ const Compound = () => {
             name='cation'
             value={cation}
             onChange={handleCationChange}
+            placeholder='cation'
             />
 
-            <label htmlFor="anion">anion:</label>
+            {/* <label htmlFor="anion">anion:</label> */}
             <input
             className=""
             type='text'
@@ -231,16 +270,19 @@ const Compound = () => {
             name='anion'
             value={anion}
             onChange={handleAnionChange}
+            placeholder='anion'
             />
 
         </div>
         
 
-        <article>
-            <h2>{cation}<sub>{displayedCharge(cation)}</sub>{anion}<sub>{displayedCharge(anion)}</sub></h2>
+        {/* <article>
+            
             <h3>Cation charge: {posCharge}</h3>
             <h3>Anion charge: {negCharge}</h3>
-        </article>
+        </article> */}
+
+        <h2>{checkPoly(cation) && posSubscript !== '' ? "(" + cation + ")" : cation}<sub>{posSubscript}</sub>{checkPoly(anion) && negSubscript !== '' ? "(" + anion + ")" : anion}<sub>{negSubscript}</sub></h2>
 
         {/* <h2>{soluble ? 'soluble!' : 'insoluble :('}</h2> */}
 

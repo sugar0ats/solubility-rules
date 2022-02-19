@@ -1,9 +1,10 @@
 class Ion {
-    constructor(name, charge, rule) {
+    constructor(name, charge, polyBool) {
         this.name = name; // a string
         this.charge = charge; // an array of integers, positive or negative
         this.isCation = (charge[0] > 0 ? true : false);
-        this.rule = rule; // an integer, which rule the ion pertains to
+        this.isPolyatomic = polyBool;
+        //this.rule = rule; // an integer, which rule the ion pertains to
     }
 
     getName() {
@@ -18,9 +19,13 @@ class Ion {
         return this.isCation;
     }
 
-    getRule() {
-        return this.rule;
+    getIsPolyatomic() {
+        return this.isPolyatomic;
     }
+
+    // getRule() {
+    //     return this.rule;
+    // }
 }
 
 const PeriodicTable = [
@@ -56,22 +61,22 @@ PeriodicTable.map((subArray, index) => {
     const newArr = subArray.map((element) => {
         //console.log(new Ion(element, chargeCoefficient * charge, null));
         charge = (element === 'Ag' ? 1 : charge);
-        return new Ion(element, [chargeCoefficient * charge], null)}
+        return new Ion(element, [chargeCoefficient * charge], false)}
     );
     
     FinalTable.push(newArr);
 });
 
 FinalTable.push([
-    new Ion('NH4', [1], 1),
-    new Ion('CH3COO', [-1], 2),
-    new Ion('CrO4', [-2], 5),
-    new Ion('NO3', [-1], 2),
-    new Ion('ClO4', [-1], 2), // DOUBLE CHECK THIS
-    new Ion('PO4', [-3], 5),
-    new Ion('CO3', [-2], 5),
-    new Ion('OH', [-1], 5),
-    new Ion('SO4', [-2], 6),
+    new Ion('NH4', [1], true),
+    new Ion('CH3COO', [-1], true),
+    new Ion('CrO4', [-2], true),
+    new Ion('NO3', [-1], true),
+    new Ion('ClO4', [-1], true), // DOUBLE CHECK THIS
+    new Ion('PO4', [-3], true),
+    new Ion('CO3', [-2], true),
+    new Ion('OH', [-1], true),
+    new Ion('SO4', [-2], true),
 ]);
 
 // accounting for polyatomic atoms
