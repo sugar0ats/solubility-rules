@@ -1,10 +1,41 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
 body {
-  margin: 0;
+  margin: auto;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-image: linear-gradient(to bottom right, rgb(164, 207, 231), rgb(75, 100, 182));
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  /* background-size: 100%; */
+  height: 100%;
+}
+
+.sol-title {
+  padding: 1rem;
+  font-size: 2.5rem;
+  color: white;
+  background-color: white;
+  color: black;
+}
+
+.main-container {
+  font-family: 'Open Sans';
+  border: 1rem solid;
+  border-radius: 3em;
+  border-color: white;
+  background: white;
+  margin: 0 auto;
+  width: 725px;
+  height: 360px;
+  top: 50%;
+  
+  box-shadow: 4px 3px 8px 1px #686972;
+  position: relative;
+
 }
 
 code {
@@ -12,14 +43,107 @@ code {
     monospace;
 }
 
+.result {
+  position: absolute;
+  bottom: -0.5rem;
+  left: 50%;
+  width: 65%;
+  border-radius: 2rem;
+  padding: 0.3rem;
+  transform: translate(-50%, -50%);
+  font-size: 2rem;
+  color: white;
+}
+
+.displayed-comp {
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 4rem;
+}
+
 .insol {
-  color:#FF4F00;
+  background-color:#FF4F00;
 }
 
 .sol {
-  color: #3BB300;
+  background-color: #3BB300;
 }
 
 .not-mol {
-  color: orange;
+  background-color: orange;
+}
+
+
+
+input {
+  position: absolute;
+  border:3px solid rgb(179, 179, 179);
+  border-radius: 0.5rem;
+  font-size: 1.5rem;
+  width:150px;
+  padding: 10px;
+  outline:none;
+  background-color: white;
+  transition: border-color 0.2s ease-in;
+}
+
+.cat-input {
+  left: 20%;
+}
+
+.an-input {
+  right: 20%;
+}
+
+input:hover {
+  border-color: #6e9acc;
+}
+
+input:focus {
+  border-color: #6e9acc;
+}
+
+label {
+  position: absolute;
+  top: 4rem;
+  padding: 0 0.4rem;
+  font-size: 1.2rem;
+  cursor: text;
+  transition: top 200ms ease-in,
+              left 200ms ease-in,
+              font-size 200ms ease-in;
+
+  background-color: white;
+
+}
+
+.cat-label {
+
+  left: 12rem;
+}
+
+.an-label {
+  left: 30rem;
+}
+
+/* .cat-input:focus {
+  background-color: #3BB300;
+} */
+
+.cat-input:focus ~ .cat-label,
+.cat-input:not(:placeholder-shown).cat-input:not(:focus)~.cat-label {
+  /* this is called a sibling selector */
+  top: 2.9rem;
+  font-size: 0.8rem;
+  left: 10.6rem;
+}
+
+.an-input:focus ~ .an-label,
+.an-input:not(:placeholder-shown).an-input:not(:focus)~.an-label {
+  /* this is called a sibling selector */
+  top: 2.9rem;
+  font-size: 0.8rem;
+  left: 26.9rem;
 }

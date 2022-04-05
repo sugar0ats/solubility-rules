@@ -6,13 +6,15 @@ function App() {
   return (
     <div className="App">
       <header>
-            <h3 className="sol-title">
+            <h1 className="sol-title">
                 Ionic Compounds Solubility Rules Checker
-            </h3>
-            <p>input a cation and an anion to see if the resulting ionic compound is soluble!</p>
+            </h1>
         </header>
+      <div className='main-container'>
+        <p>input a cation and an anion to see if the resulting ionic compound is soluble!</p>  
+        <Compound />
+      </div>
         
-      <Compound />
     </div>
   );
 }

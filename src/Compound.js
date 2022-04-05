@@ -128,8 +128,6 @@ const Compound = () => {
     //console.log(findElement('Ag'));
     //console.log("this is from the pc!! hope this actually works!");
 
-    
-
     const [anion, setAnion] = useState('Cl'); // create state variables for the anion and cation of the compound
     const [cation, setCation] = useState('Ba');
     const [posCharge, setPosCharge] = useState(findCharge(cation));
@@ -250,28 +248,33 @@ const Compound = () => {
         
 
         {/* input a cation and anion here */}
-        <div>
-            {/* <label htmlFor="cation">cation:</label> */}
+        <div className='form'>
+  
+            
             <input
-            className=""
+            className="cat-input"
             type='text'
             id='cation'
             name='cation'
             value={cation}
             onChange={handleCationChange}
-            placeholder='cation'
+            placeholder=''
+            autocomplete='off'
             />
+            <label for='cation' className='cat-label'>cation</label>
 
-            {/* <label htmlFor="anion">anion:</label> */}
+            
             <input
-            className=""
+            className="an-input"
             type='text'
             id='anion'
             name='anion'
             value={anion}
             onChange={handleAnionChange}
-            placeholder='anion'
+            placeholder=''
+            autocomplete='off'
             />
+            <label for='anion' className='an-label'>anion</label>
 
         </div>
         
@@ -282,11 +285,11 @@ const Compound = () => {
             <h3>Anion charge: {negCharge}</h3>
         </article> */}
 
-        <h2>{checkPoly(cation) && posSubscript !== '' ? "(" + cation + ")" : cation}<sub>{posSubscript}</sub>{checkPoly(anion) && negSubscript !== '' ? "(" + anion + ")" : anion}<sub>{negSubscript}</sub></h2>
+        <h2 className='displayed-comp'>{checkPoly(cation) && posSubscript !== '' ? "(" + cation + ")" : cation}<sub>{posSubscript}</sub>{checkPoly(anion) && negSubscript !== '' ? "(" + anion + ")" : anion}<sub>{negSubscript}</sub></h2>
 
         {/* <h2>{soluble ? 'soluble!' : 'insoluble :('}</h2> */}
 
-        <h2 className={`${notAMol? 'not-mol' : (soluble ? 'sol' : 'insol')}`}>
+        <h2 className={`result ${notAMol? 'not-mol' : (soluble ? 'sol' : 'insol')}`}>
             {notAMol ? 'not a valid cation or anion' : (soluble ? 'soluble!' : 'insoluble :(')}
         </h2>
     </React.Fragment>
