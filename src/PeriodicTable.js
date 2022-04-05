@@ -70,6 +70,7 @@ PeriodicTable.map((subArray, index) => {
 FinalTable.push([
     new Ion('NH4', [1], true),
     new Ion('CH3COO', [-1], true),
+    new Ion('C2H3O2', [-1], true),
     new Ion('CrO4', [-2], true),
     new Ion('NO3', [-1], true),
     new Ion('ClO4', [-1], true), // DOUBLE CHECK THIS

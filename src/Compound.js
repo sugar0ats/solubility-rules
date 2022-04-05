@@ -13,23 +13,11 @@
 TODO:
 * convert subscripts into actually subscripts for polyatomic ions using sub tag
 * figure out how to resolve the 2/2 subscript issue, where both ions have 2 as the subscript
-* CSS styling
 
 */ 
 
 import React , {useState, useEffect, useCallback} from 'react';
 import FinalTable from './PeriodicTable';
-
-// const periodicTable = [['H', 'Li', 'Na', 'K', 'Rb', 'Cs'], // each array is a column, minus the transition metals
-//                        ['Be', 'Mg', 'Ca', 'Sr', 'Ba'], 
-//                        ['Sc', 'Ti', 'V', 'Cr', 'Mn', 'Fe', 'Co', 'Ni', 'Cu', 'Zn', 'Ag', 'Cd', 'Pt', 'Au', 'Hg'], 
-//                        ['Al'], // transition metals
-//                        [], // where C would be
-//                        ['N', 'P'],
-//                        ['O', 'S'],
-//                        ['F', 'Cl', 'Br', 'I']];
-
-//const allThings = []; // all elements humanly conceivable on the PT, plus all polyatomic ions
 
 const groupTwo = ['Be', 'Ca', 'Mg', 'Ba', 'Sr']; // add more!
 const ruleSixExceptions = ['Ca', 'Ba', 'Sr'];
@@ -88,8 +76,8 @@ const findElement = (name) => { // name would be a string of the element's name
 
 } // returns an object from the sortedPT that corresponds with the element inputted
 
-const findCharge = (ion) => { // takes a string
-    const test = findElement(ion); // returns an object or false
+const findCharge = (string) => { // takes a string
+    const test = findElement(string); // returns an object or false
     if (!test) {
         return false;
     } else {
@@ -107,20 +95,18 @@ const checkPoly = (string) => {
     }
 }
 
-const isValid = (cation, anion) => {
-    // console.log(cation);
-    // console.log(anion);
-    // console.log(findElement(cation));
-    // console.log(findElement(anion));
-    // console.log(findCharge(cation)[0] > 0);
-    // console.log(findCharge(anion)[0] < 0);
-    // console.log((findElement('K') || findElement('Cl')) && findCharge('K')[0] > 0 && findCharge('Cl')[0] < 0);
-    //console.log((!findElement(cation) || !findElement(anion)) && findCharge(cation) > 0 && findCharge(anion) < 0);
-    //console.log((findElement(cation) || findElement(anion)) && findCharge(cation) > 0 && findCharge(anion) < 0);
+const isValid = (cation, anion) => { // checks if the new compound is valid
     return (findElement(cation) || findElement(anion)) && findCharge(cation)[0] > 0 && findCharge(anion)[0] < 0;
 }
 
-
+const getEmpiricalMultiple = (firstCharge, secondCharge) => {
+    console.log("firstCharge is " + firstCharge);
+    console.log("second charge is " + secondCharge);
+    if (firstCharge === 0) { // if the two charges go evenly into one another, it is not an empirical formula
+        return secondCharge;
+    } 
+    return getEmpiricalMultiple(secondCharge % firstCharge, firstCharge);
+}
 
 const Compound = () => {
     //console.log(FinalTable);
@@ -148,11 +134,11 @@ const Compound = () => {
             //console.log(type);
             let dispCharge;
             if (type) { // if the ion is a cation, its charge must be the anion's charge according to the criss-cross method
-                dispCharge = (negCharge[0] === -1 ? '' : Math.abs(negCharge));
+                dispCharge = Math.abs(negCharge);
                 console.log(dispCharge);
                 return dispCharge;
             } else {
-                dispCharge = (posCharge[0] === 1 ? '' : Math.abs(posCharge));
+                dispCharge = Math.abs(posCharge);
                 console.log(dispCharge);
                 return dispCharge;
                 
@@ -160,17 +146,21 @@ const Compound = () => {
 
         } else {
             console.log('test');
-            return false;
+            return 1;
         }
         
     }, [cation, anion, negCharge, posCharge])
 
     useEffect(() => {
-        solubleOrNah(cation, anion);
-        setPosSubscript(displayedCharge(cation));
-        setNegSubscript(displayedCharge(anion));
-        //console.log(posSubscript, negSubscript);
-        //console.log('how often does this happen?');
+        solubleOrNah(cation, anion); // everytime any of these state values change, check if the new compound is soluble, insoluble, or not a possible compound
+        const displayedCat = displayedCharge(cation);
+        console.log("what is the displayed cation? : " + displayedCat);
+        const displayedAn = displayedCharge(anion);
+        console.log("what is the displayed anion? : " + displayedAn);
+        const multiple = getEmpiricalMultiple(displayedCat, displayedAn);
+        setPosSubscript(displayedCat / multiple);
+        setNegSubscript(displayedAn / multiple);
+
     }, [cation, anion, posSubscript, negSubscript, displayedCharge])
 
     
@@ -285,7 +275,12 @@ const Compound = () => {
             <h3>Anion charge: {negCharge}</h3>
         </article> */}
 
-        <h2 className='displayed-comp'>{checkPoly(cation) && posSubscript !== '' ? "(" + cation + ")" : cation}<sub>{posSubscript}</sub>{checkPoly(anion) && negSubscript !== '' ? "(" + anion + ")" : anion}<sub>{negSubscript}</sub></h2>
+        <h2 className='displayed-comp'>
+            {checkPoly(cation) && posSubscript !== 1 ? "(" + cation + ")" : cation}
+            <sub>{posSubscript === 1 ? '' : posSubscript}</sub>
+            {checkPoly(anion) && negSubscript !== 1 ? "(" + anion + ")" : anion}
+            <sub>{negSubscript === 1 ? '' : negSubscript}</sub>
+        </h2>
 
         {/* <h2>{soluble ? 'soluble!' : 'insoluble :('}</h2> */}
 
